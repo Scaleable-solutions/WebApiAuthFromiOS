@@ -11,8 +11,8 @@ import Foundation
 struct Constants {
     
     static let authority:String = "https://login.windows.net/common";
-    static let Client_Id:String = "ac341c45-42f1-4122-894a-fb9d31144102"
-    static let Redirect_URL:NSURL = NSURL(string: "http://scaleablesolutions.com")!
+    static let Client_Id:String = "<Provide your Client_Id>"
+    static let Redirect_URL:NSURL = NSURL(string: "<Provide your Redirect_URL>")!
     
     struct WebAPI_URLs {
         static let WhoAmIRequest_URL:String = "/api/data/v8.0/WhoAmI"
