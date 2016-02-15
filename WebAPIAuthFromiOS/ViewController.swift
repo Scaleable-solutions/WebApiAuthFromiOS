@@ -14,6 +14,8 @@ class ViewController: UIViewController, NetworkDelegate {
     var er:ADAuthenticationError? = nil
     var authContext:ADAuthenticationContext? = nil
     
+    var activityIndicator:UIActivityIndicatorView!
+    
     @IBOutlet weak var DomainTextField: UITextField!
     
     var name:String = ""
@@ -56,6 +58,7 @@ class ViewController: UIViewController, NetworkDelegate {
             do{
                 let json = try NSJSONSerialization.JSONObjectWithData(response, options: .AllowFragments)
                 if let fullname = json["fullname"] as? String{
+                    self.removeActivityIndicator()
                     NSOperationQueue.mainQueue().addOperationWithBlock{
                         self.name = fullname
                         self.performSegueWithIdentifier("NameSegue", sender: self)
@@ -100,6 +103,7 @@ class ViewController: UIViewController, NetworkDelegate {
         authContext = ADAuthenticationContext(authority: Constants.authority, error: &er)
         authContext!.acquireTokenWithResource(resource, clientId: Constants.Client_Id, redirectUri: Constants.Redirect_URL){(result:ADAuthenticationResult!) in
             if(result.accessToken != nil){
+                self.addActivityIndicator()
                 let handler:ServiceHandler = ServiceHandler()
                 handler.tag = "WhoAmI"
                 handler.delegate = self
@@ -119,6 +123,19 @@ class ViewController: UIViewController, NetworkDelegate {
             print("invalid regex: \(error.localizedDescription)")
             return false
         }
+    }
+    
+    func addActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(frame: view.bounds)
+        activityIndicator.activityIndicatorViewStyle = .WhiteLarge
+        activityIndicator.backgroundColor = UIColor(white: 0, alpha: 0.25)
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
+    }
+    
+    func removeActivityIndicator() {
+        activityIndicator.removeFromSuperview()
+        activityIndicator = nil
     }
     
 }
